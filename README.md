@@ -1,8 +1,9 @@
 This is made for Taehun's ShoppingMall Portfolio.
-Please do not hesitate to look around this.
+Please do not hesitate to look around this.    
 File Path : Shoppers/src/main/...
 
-# demo site : http://52.78.140.18:8181/shop/ <-this link will be expired in 2017.08.
+# demo site: http://52.78.140.18:8181/shop/ 
+this link will be expired in 2017.08.
 
 admin ID : admin / PW : admin
 seller ID : seller1 / PW : seller1
