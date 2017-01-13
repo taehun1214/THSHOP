@@ -1,5 +1,4 @@
-한글이안쳐져
-This Git is made for Taehun's ShoppingMall Portfolio.
+This is made for Taehun's ShoppingMall Portfolio.
 Please do not hesitate to look around this.
 File Path : Shoppers/src/main/...
 
