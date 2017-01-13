@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.online.shop.MypageMapper">
+	
+	<!-- 구매자 마이 페이지 -->
+	<!-- 구매 진행 중인  건수 알아오는 쿼리  -->
+	<select id = "selectBybuymain2" resultType="com.online.shop.domain.CartandBuy">
+	select count(*) as count from s_tbl_buy b1, s_tbl_cart c1 where b1.b_id = #{b_id} and b1.BUY_STATUS between 0 and 3 and b1.buy_no = c1.buy_no
+	order by buy_date desc
+	</select>
+	
+	<!-- 구매 내역 페이징 처리를 위한 쿼리 -->
+	<select id = "selectBybuymain2page" resultType="com.online.shop.domain.CartandBuy">
+	select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select b1.BUY_NO, b1.BUY_DATE, c1.P_NAME, c1.O_CONT, c1.S_ID, b1.BUY_STATUS from s_tbl_buy b1, s_tbl_cart c1 where b1.b_id = #{b_id} and b1.BUY_STATUS between 0 and 3 
+				and b1.buy_no = c1.buy_no order by buy_date desc
+			) a
+		) b
+		where rn between 0 and 5
+	</select>
+	
+	<!-- 구매 완료인  건수 알아오는 쿼리  -->
+	<select id = "selectBybuyComplete" resultType="com.online.shop.domain.CartandBuy">
+	select count(*) as count from s_tbl_buy b1, s_tbl_cart c1 where b1.b_id = #{b_id} and b1.BUY_STATUS between 4 and 5 and b1.buy_no = c1.buy_no
+	order by buy_date desc
+	</select>
+	
+	<!-- 구매 내역 조회  (최근 5건)-->
+	<select id = "selectBybuymain" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.b_id = #{b_id} and b1.BUY_STATUS between 0 and 3 and b1.buy_no = c1.buy_no
+	and rownum between 1 and 5 order by buy_date desc
+	</select>
+	
+	<!-- 구매 완료 조회 (최근 5건)-->
+	<select id = "selectBybuyCompleteMain" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.b_id = #{b_id} and b1.BUY_STATUS between 4 and 5 and b1.buy_no = c1.buy_no
+	and rownum between 1 and 5 order by buy_date desc
+	</select>
+	
+	<!-- 모든 구매 내역 조회  -->
+	<select id = "selectByOrderMain" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.b_id = #{b_id} and b1.BUY_STATUS between 0 and 3 and b1.buy_no = c1.buy_no
+	order by buy_date desc
+	</select>
+	
+	<!-- 모든 구매 완료 내역 조회 -->
+	<select id = "selectByBuyCompleteMain2" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.b_id = #{b_id} and b1.BUY_STATUS between 4 and 5 and b1.buy_no = c1.buy_no
+	order by buy_date desc
+	</select>
+	<!-- 여기까지 구매자 마이페이지 -->
+	
+	<!-- 판매자 마이페이지 -->
+	<!-- 주문 요청 내역 갯수 -->
+	<select id="selectBySellerOrderCount" resultType="com.online.shop.domain.CartandBuy">
+	select count(*) as count from s_tbl_cart c1, s_tbl_buy b1 where c1.s_id = #{s_id} and b1.BUY_STATUS between 0 and 3 and c1.buy_no = b1.buy_no
+	order by buy_date desc
+	</select>
+	
+	<!-- 최근 5건 주문 요청 내역  -->
+	<select id = "selectBySellerOrder" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_cart c1, s_tbl_buy b1 where c1.s_id = #{s_id} and b1.BUY_STATUS between 0 and 3 and c1.buy_no = b1.buy_no
+	and rownum between 1 and 5 order by buy_date desc
+	</select>
+	
+	
+	<!-- 모든 주문 요청 내역 조회 -->
+	<select id="selectBySellerAllOrder" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_cart c1, s_tbl_buy b1 where c1.s_id = #{s_id} and b1.BUY_STATUS between 0 and 3 and c1.buy_no = b1.buy_no
+	order by buy_date desc
+	</select>
+	
+	<!-- 판매물 요청 갯수 -->
+	<select id="selectBySellerProductAccessCount" resultType="com.online.shop.domain.ProductVO">
+	select count(*) as count from s_tbl_product where s_id = #{s_id} and p_acc = 0 order by p_no
+	</select>
+	
+	<!-- 최근 5건 판매물 승인 내역-->
+	<select id="selectBySellerProductAccessList" resultType="com.online.shop.domain.ProductVO">
+	select * from s_tbl_product where s_id = #{s_id} and rownum between 1 and 5 order by p_reg desc
+	</select>
+	  
+	<!-- 판매물 승인 내역 -->
+	<select id="selectBySellerProductAccessAllList" resultType="com.online.shop.domain.ProductVO">
+	select * from s_tbl_product where s_id = #{s_id} order by p_reg desc
+	</select>
+	
+	<!-- 최근 5건 판매 완료 내역  -->
+	<select id = "selectBySellerComplete" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where c1.s_id = #{s_id} and b1.BUY_STATUS between 4 and 5 and b1.buy_no = c1.buy_no
+	and rownum between 1 and 5 order by buy_date desc
+	</select>
+	
+	<!-- 모든 판매 완료 내역 조회 -->
+	<select id="selectBySellerAllComplete" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where c1.s_id = #{s_id} and b1.BUY_STATUS between 4 and 5 and b1.buy_no = c1.buy_no
+	order by buy_date desc
+	</select>
+	<!-- 여기까지 판매자 마이페이지 -->
+	
+	<!-- 구매자 마이페이지에서 정보수정 -->
+	<update id="update-buyerInfo">
+		update s_tbl_buyer set b_pw = #{b_pw}, b_phone = #{b_phone}, b_email = #{b_email}, b_zip=#{b_zip}, b_addr1 = #{b_addr1}, b_addr2 = #{b_addr2} where B_ID = #{b_id}
+	</update>
+
+	
+ </mapper> 

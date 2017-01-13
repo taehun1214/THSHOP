@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.online.shop.ProductMapper">
+	<!-- Create(insert): 새 상품 등록 -->
+	<!-- 상품 정보 등록 -->
+	<insert id="insertProduct">
+	insert into s_tbl_product(p_name, p_price, p_cate1, p_cate2, p_stock, s_id, p_dis_rate, p_favo, p_sale_cnt, p_img)
+	values(#{p_name}, #{p_price}, #{p_cate1}, #{p_cate2}, #{p_stock}, #{s_id}, #{p_dis_rate}, #{p_favo}, #{p_sale_cnt}, #{p_img})
+	</insert>
+	
+	<!-- 상품 번호 추출 -->
+	<select id="selectProductNo" resultType="Integer">
+	select max(p_no) from s_tbl_product where s_id = #{s_id}
+	</select>
+	
+	<!-- 옵션 정보 등록 -->
+	<insert id="insertOption">
+	insert into s_tbl_option(o_title, o_cont, o_stock, p_name, s_id, p_no)
+	values(#{o_title}, #{o_cont}, #{o_stock}, #{p_name}, #{s_id}, #{p_no})
+	</insert>
+	
+	<!-- 이미지 정보 등록 -->
+	<insert id="insertImage">
+	insert into s_tbl_image(i_img, i_cont, p_name, s_id, p_no)
+	values(#{i_img}, #{i_cont}, #{p_name}, #{s_id}, #{p_no})
+	</insert>
+	
+	<!-- 상품 정보 삭제 -->
+	<delete id="deleteOptionByPno">
+	delete from s_tbl_option where p_no = #{p_no}
+	</delete>
+	
+	<delete id="deleteImageByPno">
+	delete from s_tbl_image where p_no = #{p_no}
+	</delete>
+
+	<delete id="deleteProductByPno">
+	delete from s_tbl_product where p_no = #{p_no}
+	</delete>
+	
+	<!-- 상품 정보 수정 -->
+	<select id="selectProductByPno" resultType="ProductVO">
+	select * from s_tbl_product where p_no = #{p_no}
+	</select>
+	
+	<select id="selectOptionByPno" resultType="OptionVO">
+	select * from s_tbl_option where p_no = #{p_no} order by o_no
+	</select>
+	
+	<select id="selectImageByPno" resultType="ImageVO">
+	select * from s_tbl_image where p_no = #{p_no} order by i_no
+	</select>
+	
+	<update id="updateProductByPno">
+	update s_tbl_product
+	set p_cate1 = #{p_cate1}, p_cate2 = #{p_cate2}, p_name = #{p_name}, p_price = #{p_price},
+	p_stock = #{p_stock}, p_dis_rate = #{p_dis_rate}, p_img = #{p_img}
+	where p_no = #{p_no}			
+	</update>
+	
+			<!-- 상품 카테고리검색 추가 by 김태훈-->
+	<select id="selectCate2" resultType="ProductVO">
+	select * from s_tbl_product where p_cate2 = #{p_cate2}
+	</select>
+	
+	<!-- ***** 페이징 처리 ***** -->
+	
+	  <!-- 테이블의 전체 레코드 개수를 검색 -->
+	
+	<select id="ProductsTotalCount" resultType="Integer">
+		select count(*) from s_tbl_product
+	</select>
+	
+ 	<!-- 페이징 처리를 위한 SQL -->
+	<select id="ProductsListPage" resultType="com.online.shop.domain.ProductVO">
+		select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select * from s_tbl_product order by p_no desc 
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+	
+	<!-- 검색(미완성) -->
+	<select id="search-form" resultType="com.online.shop.domain.ProductVO">
+	select * from s_tbl_product where p_name like '%'||#{p_name}||'%'
+	</select>
+	
+</mapper>

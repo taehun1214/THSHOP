@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.online.shop.AdminMapper">
+	<select id="selectByBuy" resultType="com.online.shop.domain.BuyVO">
+	select * from s_tbl_Buy where buy_status = 5  and rownum between 1 and 5 order by buy_date desc
+	</select>
+	<select id="selectBybuymain" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.BUY_STATUS = 5 and b1.buy_no = c1.buy_no 
+	and rownum between 1 and 5 order by buy_date desc
+	</select>
+	
+	<select id = "selectByBuy2" resultType="com.online.shop.domain.BuyVO">
+	select * from s_tbl_Buy where buy_status between 0 and 3 and rownum between 1 and 5 order by buy_date desc
+	</select>
+	<select id = "selectBybuymain2" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.BUY_STATUS between 0 and 3 and b1.buy_no = c1.buy_no
+	and rownum between 1 and 5 order by buy_date desc
+	</select>
+	
+	<select id = "selectByBuyr" resultType="com.online.shop.domain.BuyVO">
+	select * from s_tbl_Buy where buy_status between 0 and 3 order by buy_date desc
+	</select>
+	
+	
+	<select id = "selectBysubr" resultType="com.online.shop.domain.CartandBuy">
+	select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select b1.BUY_NO, b1.BUY_DATE, c1.P_NAME, c1.O_CONT, c1.S_ID, b1.BUY_STATUS, b1.b_id, c1.P_PRICE  from s_tbl_buy b1, s_tbl_cart c1 where b1.BUY_STATUS between 0 and 3 and b1.buy_no = c1.buy_no
+				order by buy_date desc
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+    
+    <select id = "selectByBuyf" resultType="com.online.shop.domain.BuyVO">
+	select * from s_tbl_Buy where buy_status = 5 order by buy_date desc
+	</select>
+	<select id="selectBybuysubf" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.BUY_STATUS = 5 and b1.buy_no = c1.buy_no 
+	order by buy_date desc
+	</select>
+	
+	<select id="selectBysubf" resultType="com.online.shop.domain.CartandBuy">
+	select * from s_tbl_buy b1, s_tbl_cart c1 where b1.BUY_STATUS = 5 and b1.buy_no = c1.buy_no 
+	order by buy_date desc
+	</select>
+
+	<select id = "selectByBuyRequest" resultType="com.online.shop.domain.BuyVO">
+	select * from S_TBL_BUY where BUY_STATUS between 0 and 2 order by buy_date desc
+	</select>
+	
+	<select id = "selectByBuyToday" resultType="com.online.shop.domain.BuyVO">
+	select * from S_TBL_BUY where to_char(buy_comp,'yy/MM/dd') like #{today} and BUY_STATUS = 5 order by buy_date desc
+	</select>
+
+	<!-- 주문 요청 내역 페이징 처리를 위한 쿼리문 -->
+	<!-- 전체 페이지 수를 검색 -->
+	<select id="buyrTotalCount" resultType="Integer">
+		select count(*) from s_tbl_Buy where buy_status between 0 and 3
+	</select>
+	
+	<!-- 주문 요청 내역을 페이징 처리하기 위한 쿼리문 -->
+	<select id="buyrListPage" resultType="com.online.shop.domain.BuyVO">
+		select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select * from S_TBL_Buy  where buy_status between 0 and 3 order by buy_no 
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+	
+	<!-- 주문 요청 페이지 검색 기능을 위한 쿼리 -->
+	<!-- 주문 요청 내역에서 검색된 목록들을 세기 위한 쿼리 -->
+	<select id="buyrListSearchCount" resultType="Integer">
+		select count(buy_no) from s_tbl_buy where buy_status between 0 and 3
+		<include refid="buyrSearch"></include>
+	</select>
+	
+	<!-- 주문 요청 내역에서 검색을 위한 쿼리 -->
+	<select id="buyrListSearch" resultType="com.online.shop.domain.BuyVO">
+	select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select * from S_TBL_buy where buy_status between 0 and 3
+				<include refid="buyrSearch"></include>
+		 		order by buy_no 
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+	
+	<!-- option 제약조건 -->
+	<sql id="buyrSearch">
+		<if test="searchType != null">
+			<if test="searchType == 'n'.toString()"></if>
+			<if test="searchType == 's'.toString()">
+				and s_id like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'b'.toString()">
+				and b_id like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 't'.toString()">
+				and buy_status like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'sb'.toString()">
+				and (s_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				b_id like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'st'.toString()">
+				and (s_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				b_status like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'bt'.toString()">
+				and (b_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				buy_status like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'sbt'.toString()">
+				and (s_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				(b_id like CONCAT(CONCAT('%', #{keyword}) , '%')) OR
+				buy_status like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+		</if>
+	</sql>	
+	
+	<!-- 전체 판매 내역 페이징 처리를 위한 쿼리문 -->
+	<!-- 전체 페이지 수를 검색 -->
+	<select id="buyfTotalCount" resultType="Integer">
+		select count(*) from s_tbl_Buy where buy_status = 5 order by buy_date desc
+	</select>
+	
+	<!-- 전체 판매 내역을 페이징 처리하기 위한 쿼리문 -->
+	<select id="buyfListPage" resultType="com.online.shop.domain.BuyVO">
+		select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select * from S_TBL_Buy  where buy_status = 5 order by buy_date desc 
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+	
+ </mapper>

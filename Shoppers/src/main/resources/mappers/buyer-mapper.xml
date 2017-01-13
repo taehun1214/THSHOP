@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <!-- SQL 문장들을 작성하는 XML 파일 -->
+ <mapper namespace="com.online.shop.BuyerMapper">
+ 
+      <!-- INSERT SQL문 --> 				<!-- #{} : 스프링에서 사용하는 EL -->
+     <insert id="buyer-insert">
+         insert into s_tbl_buyer(b_id, b_pw, b_name, b_gender, b_birth, b_phone, b_email, b_zip, b_addr1, b_addr2)
+         values(#{b_id}, #{b_pw}, #{b_name}, #{b_gender}, #{b_birth}, #{b_phone}, #{b_email}, #{b_zip}, #{b_addr1}, #{b_addr2}) 
+     </insert>
+     
+    <!-- 검색하는 SQL문 -->
+    <select id="select-by-b_id"
+        resultType="BuyerVO">
+    select * from s_tbl_buyer where b_id = #{b_id}
+    </select>
+    
+    	<!-- 로그인 -->
+    <select id="buyer-login" resultType="Integer">
+    select count(1) from s_tbl_buyer where b_id = #{b_id} and b_pw = #{b_pw}
+    </select>
+    
+    <update id="update-buyerInfo">
+		update s_tbl_buyer set B_PW = #{b_pw}, b_phone = #{b_phone}, 
+		B_EMAIL = #{b_email}, b_zip=#{b_zip}, b_addr1 = #{b_addr1}, b_addr2 = #{b_addr2} where B_ID = #{b_id}
+	</update>
+
+	<delete id = "delete-buyer">
+		delete from s_tbl_buyer where b_id = #{b_id}
+	</delete>
+
+<!-- id/pw 찾기 sql문 -->
+	<select id="buyer-find-id" resultType="BuyerVO">
+	select * from s_tbl_buyer where b_name = #{b_name} and b_email = #{b_email}
+	</select>
+
+	<select id="buyer-find-pw" resultType="BuyerVO">
+	select * from s_tbl_buyer where b_id = #{b_id} and b_email = #{b_email}
+	</select>
+	
+	<update id="update-buyer-pw">
+		update s_tbl_buyer set B_PW = #{b_pw} where B_ID = #{b_id}
+	</update>
+	
+ </mapper>

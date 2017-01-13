@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--** 작성 ** -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.online.shop.ShopMapper">
+ 	<!-- 판매물 등록 관련 커리문 -->
+	<!-- Read(select): 판매 상품 전체 검색 -->
+	<select id="productSelectAll" resultType="com.online.shop.domain.ProductVO">
+		select * from
+		S_TBL_PRODUCT order by p_no
+	</select>
+
+	<!-- 전체 페이지 수를 검색 -->
+	<select id="productTotalCount" resultType="Integer">
+		select count(*) from S_TBL_PRODUCT
+	</select>
+
+	<!-- 상품 등록 페이지에서 페이징 처리를 위한 SQL -->
+	<select id="productListPage" resultType="com.online.shop.domain.ProductVO">
+		select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select * from S_TBL_PRODUCT	order by p_no 
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+	
+	<!-- 상품 등록 검색목록 전체를 세기 위한 쿼리 -->
+	<select id="productListSearchCount" resultType="Integer">
+
+		select count(p_no) from S_TBL_PRODUCT
+	
+		<include refid="productSearch"></include>
+	</select>
+	
+	<!-- 상품 등록 페이지에서 검색을 위한 쿼리 -->
+	<select id="productListSearch" resultType="com.online.shop.domain.ProductVO">
+	select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select * from S_TBL_PRODUCT
+				<include refid="productSearch"></include>
+		 		order by p_no 
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+	
+	<!-- option 제약조건 -->
+	<sql id="productSearch">
+		<if test="searchType != null">
+			<if test="searchType == 'i'.toString()">
+				where s_id like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'b'.toString()">
+				where p_no like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'p'.toString()">
+				where p_name like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'ib'.toString()">
+				where (s_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				p_no like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'ip'.toString()">
+				where (s_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				p_name like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'bp'.toString()">
+				where (p_no like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				p_name like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'ibp'.toString()">
+				where (s_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				(p_no like CONCAT(CONCAT('%', #{keyword}) , '%')) OR
+				p_name like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+		</if>
+	</sql>	
+	
+	<!-- 판매물 승인 쿼리문 -->
+	<update id="productAccept">
+		update S_TBL_PRODUCT set p_acc = 1 where p_no = #{p_no}
+	</update>
+	
+	 
+	<!-- 판매자 목록 페이지 쿼리문 -->
+	<!-- Read(select): 판매자 전체 검색 -->
+	<select id="sellerSelectAll" resultType="com.online.shop.domain.SellerVO">
+		select * from
+		S_TBL_SELLER order by s_no
+	</select>
+	
+	<!-- 페이지 개수 세는 쿼리문 -->
+	<select id="sellerTotalCount" resultType="Integer">
+		select count(*) from
+		S_TBL_SELLER
+	</select>
+
+	<!-- 판매자 페이지에서 페이징 처리를 위한 SQL -->
+	<select id="sellerListPage" resultType="com.online.shop.domain.SellerVO">
+		select b.*
+		from (
+		select rownum
+		rn, a.*
+		from (
+		select * from S_TBL_SELLER order by s_no
+		) a
+		) b
+		where rn
+		between #{start} and #{end}
+	</select>
+	
+	<!-- 판매자 검색용 쿼리 -->
+	<select id="searchListSearch" resultType="com.online.shop.domain.SellerVO">
+		select b.*
+		from (
+			select rownum rn, a.*
+			from (
+				select * from S_TBL_SELLER
+				<include refid="sellerSearch"></include>
+		 		order by s_no 
+			) a
+		) b
+		where rn between #{start} and #{end}
+	</select>
+	<!-- 판매자 검색 리스트를 세는 쿼리 -->
+	<select id="sellerListSearchCount" resultType="Integer">
+
+		select count(s_no) from S_TBL_SELLER
+	
+		<include refid="sellerSearch"></include>
+	</select>
+
+	<!-- option 제약조건 -->
+	<sql id="sellerSearch">
+		<if test="searchType != null">
+			<if test="searchType == 'b'.toString()">
+				where s_no like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'i'.toString()">
+				where s_id like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'e'.toString()">
+				where s_email like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'bi'.toString()">
+				where (s_no like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				s_id like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'be'.toString()">
+				where (s_no like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				s_email like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'ie'.toString()">
+				where (s_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				s_email like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+			<if test="searchType == 'bie'.toString()">
+				where (s_no like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				(s_id like CONCAT(CONCAT('%', #{keyword}) , '%')) OR
+				s_email like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+		</if>
+	</sql>	
+	
+	<!-- 판매자 가입 승인 쿼리 -->
+	<update id="sellerAccept">
+		update S_TBL_SELLER set s_acc = 1 where s_no = #{s_no}
+	</update>
+	
+	
+	<!-- 구매자 회원 관리 관련 커리문 -->
+	<!-- Read(select): 판매자 전체 검색 -->
+	<select id="buyerSelectAll" resultType="com.online.shop.domain.BuyerVO">
+		select * from S_TBL_BUYER
+		order by b_no
+	</select>
+
+	<!-- 페이지 개수 세는 쿼리문 -->
+	<select id="totalCount" resultType="Integer">
+		select count(*) from
+		S_TBL_BUYER
+	</select>
+
+	<!-- 구매자 회원 관리 페이징 처리를 위한 SQL -->
+	<select id="listPage" resultType="com.online.shop.domain.BuyerVO">
+		select b.*
+		from (
+		select rownum
+		rn, a.*
+		from (
+		select * from S_TBL_BUYER order by b_no
+		) a
+		) b
+		where rn
+		between #{start} and #{end}
+	</select>
+
+	<!-- 구매자 검색용 쿼리 -->
+	<select id="listSearch" resultType="com.online.shop.domain.BuyerVO">
+		select b.*
+		from (
+		select rownum
+		rn, a.*
+		from (
+		select * from S_TBL_BUYER
+	<include refid="search"></include>
+		 order by b_no 
+		) a
+		) b
+		where rn
+		between #{start} and #{end}
+	</select>
+
+	<select id="listSearchCount" resultType="Integer">
+
+		select count(b_no) from S_TBL_BUYER
+
+	
+		<include refid="search"></include>
+		
+	</select>
+
+	<!-- option 제약조건 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'i'.toString()">
+				where b_id like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'n'.toString()">
+				where b_name like CONCAT(CONCAT('%', #{keyword}) , '%')
+			</if>
+			<if test="searchType == 'in'.toString()">
+				where (b_id like CONCAT(CONCAT('%', #{keyword}) , '%') OR
+				b_name like
+				CONCAT(CONCAT('%', #{keyword}) , '%'))
+			</if>
+		</if>
+	</sql>
+	
+	
+	<!-- seller에서 미승인된 판매자 회원만 뽑아오는 쿼리  -->
+	<select id="selectAccess" resultType="com.online.shop.domain.SellerVO">
+		select * from S_TBL_SELLER where s_acc = 0 order by s_reg desc
+	</select>
+
+	<!-- product에서 미승인된 판매물만 검색 -->
+	<select id="productAccess" resultType="com.online.shop.domain.ProductVO">
+		select * from S_TBL_PRODUCT where p_acc = 0 order by p_reg desc
+	</select>
+
+</mapper>
