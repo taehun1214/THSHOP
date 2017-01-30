@@ -55,16 +55,6 @@ public class AdminController {
 		model.addAttribute("sellerList", list);
 
 	}
-	
-	// 메인 jsp 콘트롤러
-	/*	@RequestMapping(value = "/admin/admin_bootstrap", method = RequestMethod.GET)
-		public void listSellerbootstrap(Model model) {
-			logger.info("listSeller() 호출...");
-
-			List<SellerVO> list = sellerservice.read();
-			model.addAttribute("sellerList", list);
-
-		}*/ 
 
 	// 관리자 마이페이지 콘트롤러
 	@RequestMapping(value = "/admin/admin_mypage", method = RequestMethod.GET)

@@ -20,6 +20,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import com.online.shop.domain.BuyerVO;
 import com.online.shop.domain.ImageVO;
@@ -69,6 +73,45 @@ public class HomeController {
 	
 	/*---------------------------------------------------------------------------------*/
 // ** 비회원 메인 화면
+	
+	@RequestMapping("cheap")
+	public @ResponseBody List<ProductVO> cheapProducts(HttpServletRequest request) {
+		List<ProductVO> vo = sellerService.readProductBySid("seller1");
+		return vo;
+	}
+	
+	@RequestMapping("cheapForSub")
+	public @ResponseBody ProductVO cheapProductForSub(HttpServletRequest request, int p_no) {
+		logger.info("ceapForSub ");
+		ProductVO vo = sellerService.readItemByPno(p_no); // 상품 번호에 의한 각 상품의 전체
+		return vo;
+	}
+	
+	@RequestMapping("expensive")
+	public @ResponseBody List<ProductVO> expensiveProducts(HttpServletRequest request) {
+		List<ProductVO> vo = sellerService.readProductBySid("seller2");
+		return vo;
+	}
+	
+	@RequestMapping("expensiveForSub")
+	public @ResponseBody ProductVO expensiveProductForSub(HttpServletRequest request, int p_no) {
+	
+		ProductVO vo = sellerService.readItemByPno(p_no); // 상품 번호에 의한 각 상품의 전체
+		return vo;
+	}
+	
+	@RequestMapping("android")
+	public @ResponseBody List<ProductVO> androidTestWithRequest(HttpServletRequest request) {
+		
+		logger.info("Android Accessed2");
+		System.out.println(request.getParameter("test"));
+		System.out.println(request.getParameter("title"));
+		System.out.println(request.getParameter("memo"));
+		
+		// BuyerVO vo = buyerService.read("buyer1");
+		List<ProductVO> vo = sellerService.readAllProduct();
+		return vo;
+	}
 	
 	@RequestMapping(value="template_form", method=RequestMethod.GET)
 	public void openTemplete(){
@@ -275,13 +318,7 @@ public class HomeController {
 
 // ** 구매자 회웝가입 _가입완료 버튼 클릭
 	@RequestMapping(value = "buyer/b_register_result", method = RequestMethod.POST)
-	public String b_register_result(BuyerVO vo, HttpServletRequest request) { // default
-																				// 객체로
-																				// 생성하고
-																				// name
-																				// 정보들을
-																				// set
-																				// 한다.
+	public String b_register_result(BuyerVO vo, HttpServletRequest request) { 
 		vo.setB_pw(EncryptUtil.getEncryptMD5(vo.getB_pw()));
 		// login1 폼에서 입력받은 값을 vo 에 넣어서 insert합니다.
 		// 아이디가 PK라서 같은 아이디 두번넣으면 에러남.
