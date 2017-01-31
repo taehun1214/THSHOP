@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.online.shop.domain.AndroidVO;
 import com.online.shop.domain.BuyerVO;
 import com.online.shop.domain.ImageVO;
 import com.online.shop.domain.OptionVO;
@@ -34,8 +35,10 @@ import com.online.shop.domain.QnaVO;
 import com.online.shop.domain.ReviewRVO;
 import com.online.shop.domain.ReviewVO;
 import com.online.shop.domain.SellerVO;
+import com.online.shop.persistence.AndroidDAO;
 import com.online.shop.persistence.QnADAO;
 import com.online.shop.persistence.RevDAO;
+import com.online.shop.service.AndroidService;
 import com.online.shop.service.BuyerService;
 import com.online.shop.service.ProductService;
 import com.online.shop.service.SellerService;
@@ -69,10 +72,32 @@ public class HomeController {
 
 	@Autowired
 	SellerService sellerService;
+	
+	@Autowired
+	AndroidService androidService;
+	
+	@Autowired
+	AndroidDAO androidDao;
 
 	
 	/*---------------------------------------------------------------------------------*/
-// ** 비회원 메인 화면
+// ** Android~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid
+	
+	@RequestMapping("replyInsertForAndroid")
+	public @ResponseBody int insertReplyForAndroid(HttpServletRequest request, AndroidVO vo) {
+		logger.info("insert ! start !");
+		int result = androidService.insert(vo);
+		logger.info("insert ! done !");
+		return result;
+	}
+	
+	@RequestMapping("replySelectForAndroid")
+	public @ResponseBody List<AndroidVO> replySelectForAndroid(HttpServletRequest request, String p_no){
+		logger.info("select ! start !");
+		List<AndroidVO> vo = androidService.select(p_no);
+		logger.info("select ! done !");
+		return vo;
+	}
 	
 	@RequestMapping("cheap")
 	public @ResponseBody List<ProductVO> cheapProducts(HttpServletRequest request) {
@@ -112,6 +137,8 @@ public class HomeController {
 		List<ProductVO> vo = sellerService.readAllProduct();
 		return vo;
 	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////
 	
 	@RequestMapping(value="template_form", method=RequestMethod.GET)
 	public void openTemplete(){
