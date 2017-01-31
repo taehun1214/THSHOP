@@ -76,10 +76,6 @@ public class HomeController {
 	@Autowired
 	AndroidService androidService;
 	
-	@Autowired
-	AndroidDAO androidDao;
-
-	
 	/*---------------------------------------------------------------------------------*/
 // ** Android~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid
 	
