@@ -79,7 +79,7 @@ public class HomeController {
 	/*---------------------------------------------------------------------------------*/
 // ** Android~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid
 	
-	@RequestMapping("replyInsertForAndroid")
+	@RequestMapping("insertReply")
 	public @ResponseBody int insertReplyForAndroid(HttpServletRequest request, AndroidVO vo) {
 		logger.info("insert ! start !");
 		int result = androidService.insert(vo);
@@ -87,7 +87,7 @@ public class HomeController {
 		return result;
 	}
 	
-	@RequestMapping("replySelectForAndroid")
+	@RequestMapping("selectReply")
 	public @ResponseBody List<AndroidVO> replySelectForAndroid(HttpServletRequest request, String p_no){
 		logger.info("select ! start !");
 		List<AndroidVO> vo = androidService.select(p_no);

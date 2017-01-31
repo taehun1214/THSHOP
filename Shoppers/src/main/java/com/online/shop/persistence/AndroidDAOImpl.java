@@ -18,12 +18,12 @@ public class AndroidDAOImpl implements AndroidDAO {
 
 	@Override
 	public int insert(AndroidVO vo) {
-		return sqlSession.insert(NAMESPACEM+"insert-reply-android", vo);
+		return sqlSession.insert(NAMESPACEM+".insert-reply-android", vo);
 	}
 
 	@Override
 	public List<AndroidVO> select(String p_no) {
-		return sqlSession.selectList(NAMESPACEM+"select-reply-android", p_no);
+		return sqlSession.selectList(NAMESPACEM+".select-reply-android", p_no);
 	}
 	
 

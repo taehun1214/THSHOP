@@ -5,11 +5,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.online.shop.AndroidMapper">
 <insert id="insert-reply-android">
-insert into and-reply(p_no, writer, cont)
+insert into and_reply(p_no, writer, cont)
 values(#{p_no}, #{writer}, #{cont}) 
 </insert>
 
 <select id="select-reply-android" resultType="com.online.shop.domain.AndroidVO">
-select * from and-reply where p_no = #{p_no}
+select * from and_reply where p_no = #{p_no}
 </select>
+
 </mapper>
