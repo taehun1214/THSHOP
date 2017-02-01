@@ -22,9 +22,20 @@ public class AndroidDAOImpl implements AndroidDAO {
 	}
 
 	@Override
-	public List<AndroidVO> select(String p_no) {
+	public List<AndroidVO> select(int p_no) {
 		return sqlSession.selectList(NAMESPACEM+".select-reply-android", p_no);
 	}
+
+	@Override
+	public int selectRno(int p_no) {
+		return sqlSession.selectOne(NAMESPACEM+".select-rno-android", p_no);
+	}
+
+	@Override
+	public AndroidVO selectUpatedRepl(int r_no) {
+		return sqlSession.selectOne(NAMESPACEM+".select-reply-updated", r_no);
+	}
+	
 	
 
 }

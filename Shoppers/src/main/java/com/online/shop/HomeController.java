@@ -76,45 +76,49 @@ public class HomeController {
 	@Autowired
 	AndroidService androidService;
 	
+	@Autowired
+	AndroidDAO android;
+	
 	/*---------------------------------------------------------------------------------*/
 // ** Android~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid
 	
 	@RequestMapping("insertReply")
-	public @ResponseBody int insertReplyForAndroid(HttpServletRequest request, AndroidVO vo) {
+	public @ResponseBody List<AndroidVO> insertReplyForAndroid(HttpServletRequest request, AndroidVO vo) {
 		logger.info("insert ! start !");
 		int result = androidService.insert(vo);
 		logger.info("insert ! done !");
-		return result;
+		
+		return androidService.select(vo.getP_no());
 	}
 	
 	@RequestMapping("selectReply")
-	public @ResponseBody List<AndroidVO> replySelectForAndroid(HttpServletRequest request, String p_no){
+	public @ResponseBody List<AndroidVO> replySelectForAndroid(HttpServletRequest request, int p_no){
 		logger.info("select ! start !");
 		List<AndroidVO> vo = androidService.select(p_no);
 		logger.info("select ! done !");
 		return vo;
 	}
 	
-	@RequestMapping("cheap")
+	@RequestMapping("cheaps")
 	public @ResponseBody List<ProductVO> cheapProducts(HttpServletRequest request) {
-		List<ProductVO> vo = sellerService.readProductBySid("seller1");
+		List<ProductVO> vo = sellerService.readProductBySid("cheaps");
 		return vo;
 	}
 	
-	@RequestMapping("cheapForSub")
+	@RequestMapping("cheapsForSub")
 	public @ResponseBody ProductVO cheapProductForSub(HttpServletRequest request, int p_no) {
 		logger.info("ceapForSub ");
 		ProductVO vo = sellerService.readItemByPno(p_no); // 상품 번호에 의한 각 상품의 전체
 		return vo;
 	}
 	
-	@RequestMapping("expensive")
+	@RequestMapping("pish")
 	public @ResponseBody List<ProductVO> expensiveProducts(HttpServletRequest request) {
-		List<ProductVO> vo = sellerService.readProductBySid("seller2");
+		List<ProductVO> vo = sellerService.readProductBySid("pish");
 		return vo;
 	}
 	
-	@RequestMapping("expensiveForSub")
+	@RequestMapping("pishForSub")
 	public @ResponseBody ProductVO expensiveProductForSub(HttpServletRequest request, int p_no) {
 	
 		ProductVO vo = sellerService.readItemByPno(p_no); // 상품 번호에 의한 각 상품의 전체

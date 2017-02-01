@@ -21,7 +21,7 @@ public class AndroidServiceImpl implements AndroidService {
 	}
 
 	@Override
-	public List<AndroidVO> select(String p_no) {
+	public List<AndroidVO> select(int p_no) {
 		// TODO Auto-generated method stub
 		return dao.select(p_no);
 	}

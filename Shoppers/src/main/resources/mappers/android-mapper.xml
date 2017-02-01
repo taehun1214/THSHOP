@@ -10,7 +10,15 @@ values(#{p_no}, #{writer}, #{cont})
 </insert>
 
 <select id="select-reply-android" resultType="com.online.shop.domain.AndroidVO">
-select * from and_reply where p_no = #{p_no}
+select * from and_reply where p_no = #{p_no} order by r_no desc
+</select>
+
+<select id="select-rno-android" resultType="Integer">
+select max(r_no) from and_reply where p_no = #{p_no}
+</select>
+
+<select id="select-reply-updated" resultType="com.online.shop.domain.AndroidVO">
+select writer, cont from and_reply where r_no = #{r_no}
 </select>
 
 </mapper>
