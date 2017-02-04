@@ -82,6 +82,11 @@ public class HomeController {
 	/*---------------------------------------------------------------------------------*/
 // ** Android~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid
 	
+	@RequestMapping(value = "privacy", method = RequestMethod.GET)
+	public String getPrivacy(){
+		return "privacy";
+	}
+	
 	@RequestMapping("uploadProductForAndroid")
 	public @ResponseBody List<ProductVO> pRegisterPOST(ProductVO pVo, String[] o_title, String[] o_cont, int[] o_stock, 
 			String[] i_img, String[] i_cont) {
