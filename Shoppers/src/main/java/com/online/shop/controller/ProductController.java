@@ -34,7 +34,8 @@ public class ProductController {
 		return "seller/sudo_product_register";
 	} // end registerGET()
 	
-	@RequestMapping(value="pRegister", method=RequestMethod.POST)
+	// pRegister (POST) -> uploadProduct (GET)
+	@RequestMapping(value="uploadProduct", method=RequestMethod.GET)
 	public String pRegisterPOST(ProductVO pVo, String[] o_title, String[] o_cont, int[] o_stock, 
 			String[] i_img, String[] i_cont) {
 		

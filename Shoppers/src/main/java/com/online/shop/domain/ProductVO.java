@@ -17,6 +17,8 @@ public class ProductVO {
 	private int p_favo;
 	private int p_sale_cnt;
 	private String p_img;
+	
+	private String and_desc; // For androidApp only
 
 	private int p_acc; // 상품 승인
 	private int count;
@@ -28,6 +30,17 @@ public class ProductVO {
 	// getter/setter 메소드
 	public int getP_no() {
 		return p_no;
+	}
+	
+	
+	
+
+	public String getAnd_desc() {
+		return and_desc;
+	}
+
+	public void setAnd_desc(String and_desc) {
+		this.and_desc = and_desc;
 	}
 
 	public void setP_no(int p_no) {

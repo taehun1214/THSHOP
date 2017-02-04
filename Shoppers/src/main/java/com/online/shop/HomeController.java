@@ -82,6 +82,64 @@ public class HomeController {
 	/*---------------------------------------------------------------------------------*/
 // ** Android~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid~~~~~~~~~~~~AndroidAndroid
 	
+	@RequestMapping("uploadProductForAndroid")
+	public @ResponseBody List<ProductVO> pRegisterPOST(ProductVO pVo, String[] o_title, String[] o_cont, int[] o_stock, 
+			String[] i_img, String[] i_cont) {
+		
+		// 서비스 객체를 사용해서 DB insert
+		
+		// 상품 정보 insert
+		logger.info("p_name: " + pVo.getP_name());
+		
+		int pResult = productService.createProduct(pVo);
+		
+		// 상품의 상품번호 받아오기
+		int pno = productService.readProductNo(pVo.getS_id());
+		logger.info("p_no: " + pno);
+		
+		// 옵션 정보 insert
+		logger.info("o_title: " + o_title);
+		
+		for (int i = 0; i < o_title.length; i++) {
+			
+			OptionVO oVo = new OptionVO();
+			
+			oVo.setO_title(o_title[i]);
+			oVo.setO_cont(o_cont[i]);
+			oVo.setO_stock(o_stock[i]);
+			oVo.setP_name(pVo.getP_name());
+			oVo.setS_id(pVo.getS_id());
+			oVo.setP_no(pno);
+			
+			int oResult = productService.createOption(oVo);
+		}
+		
+		// 이미지 정보 insert
+		logger.info("i_img: " + i_img);
+		
+		for (int i = 0; i < i_img.length; i++) {
+			ImageVO iVo = new ImageVO();
+			iVo.setI_img(i_img[i]);
+			iVo.setI_cont(i_cont[i]);
+			iVo.setP_name(pVo.getP_name());
+			iVo.setS_id(pVo.getS_id());
+			iVo.setP_no(pno);
+			
+			int iResult = productService.createImage(iVo);
+		}
+		List<ProductVO> vo = sellerService.readProductBySid(pVo.getS_id());
+		
+		return vo;
+		
+	} // end registerPOST()
+	
+	@RequestMapping("insertProduct")
+	public @ResponseBody List<AndroidVO> insertProduct(HttpServletRequest request){
+		logger.info("new Product");
+		// TODO : EDIT This..
+		return null;
+	}
+	
 	@RequestMapping("insertReply")
 	public @ResponseBody List<AndroidVO> insertReplyForAndroid(HttpServletRequest request, AndroidVO vo) {
 		logger.info("insert ! start !");

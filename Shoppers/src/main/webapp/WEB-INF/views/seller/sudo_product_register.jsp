@@ -459,7 +459,7 @@ var x=0;
 									<h4 class="title"><span class="text"><strong>Register</strong> Form</span></h4>
 									
 									<!-- <form action="b_register_result" method="post" id="fileForm1" role="form">** submit -->
-									<form id="pRegister" action="pRegister" method="post">		<!-- TODO : ****** -->
+									<form id="pRegister" action="uploadProduct" method="get">		<!-- TODO : ****** -->
 									
 										<!-- ######################################## -->
 										<!-- 왼쪽 -->
@@ -474,6 +474,8 @@ var x=0;
 											<input type="hidden" name="p_favo" value="0" />
 											<!-- 판매량 -->
 											<input type="hidden" name="p_sale_cnt" value="0" />
+											
+											<input type="hidden" name="and_desc" value=" ">
 											
 											<!-- -------------------------------------------------------------- -->
 											
