@@ -7,8 +7,8 @@
 	<!-- Create(insert): 새 상품 등록 -->
 	<!-- 상품 정보 등록 -->
 	<insert id="insertProduct">
-	insert into s_tbl_product(p_name, p_price, p_cate1, p_cate2, p_stock, s_id, p_dis_rate, p_favo, p_sale_cnt, p_img, and_desc)
-	values(#{p_name}, #{p_price}, #{p_cate1}, #{p_cate2}, #{p_stock}, #{s_id}, #{p_dis_rate}, #{p_favo}, #{p_sale_cnt}, #{p_img}, #{and_desc})
+	insert into s_tbl_product(p_name, p_price, p_cate1, p_cate2, p_stock, s_id, p_dis_rate, p_favo, p_sale_cnt, p_img, and_desc, token)
+	values(#{p_name}, #{p_price}, #{p_cate1}, #{p_cate2}, #{p_stock}, #{s_id}, #{p_dis_rate}, #{p_favo}, #{p_sale_cnt}, #{p_img}, #{and_desc}, #{token})
 	</insert>
 	
 	<!-- 상품 번호 추출 -->

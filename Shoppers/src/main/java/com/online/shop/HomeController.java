@@ -1,6 +1,7 @@
 package com.online.shop;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +88,27 @@ public class HomeController {
 		return "privacy";
 	}
 	
-	@RequestMapping("uploadProductForAndroid")
-	public @ResponseBody List<ProductVO> pRegisterPOST(ProductVO pVo, String[] o_title, String[] o_cont, int[] o_stock, 
+	@RequestMapping(value="uploadProductForAndroid", produces = "application/json; charset=utf8")
+	public @ResponseBody List<ProductVO> pRegisterPOST(HttpServletRequest request, ProductVO pVo, String[] o_title, String[] o_cont, int[] o_stock, 
 			String[] i_img, String[] i_cont) {
+		
+		String writer = pVo.getP_name(), trash, realwriter;/*
+		String cont = pVo.getAnd_desc(), contrash, realcont;
+		String trashsid = pVo.getS_id(), before, after;
+		
+		int ic = writer.indexOf(",");
+		int c = cont.indexOf(",");
+		int s = trashsid.indexOf(",");
+		trash = writer.substring(0, ic);
+		contrash = cont.substring(0, c);
+		before = trashsid.substring(0, s);
+		realwriter = writer.substring(ic+1);
+		realcont = cont.substring(c+1);
+		after = trashsid.substring(s+1);
+		
+		pVo.setAnd_desc(realcont);
+		pVo.setP_name(realwriter);
+		pVo.setS_id(after);*/
 		
 		// 서비스 객체를 사용해서 DB insert
 		
@@ -138,18 +157,19 @@ public class HomeController {
 		
 	} // end registerPOST()
 	
-	@RequestMapping("insertProduct")
-	public @ResponseBody List<AndroidVO> insertProduct(HttpServletRequest request){
-		logger.info("new Product");
-		// TODO : EDIT This..
-		return null;
-	}
 	
-	@RequestMapping("insertReply")
+	@RequestMapping(value="insertReply", produces = "application/json; charset=utf8")
 	public @ResponseBody List<AndroidVO> insertReplyForAndroid(HttpServletRequest request, AndroidVO vo) {
 		logger.info("insert ! start !");
+		logger.info("requested Encoding" + request.getCharacterEncoding());
+		
+		logger.info("to be inserted writer & comment : " + vo.getWriter() + " / " + vo.getCont());
+		
 		int result = androidService.insert(vo);
+		
 		logger.info("insert ! done !");
+		
+		logger.info("return value = " + androidService.select(vo.getP_no()));
 		
 		return androidService.select(vo.getP_no());
 	}
@@ -232,9 +252,9 @@ public class HomeController {
 		logger.info("remainder : " + remainder);
 		/* logger.info(productList.get(0).getP_name()); */
 		
-		for(int i = 0; i<productList.size() ; i++ ) {
+		/*for(int i = 0; i<productList.size() ; i++ ) {
 			logger.info("p_acc: " + productList.get(i).getP_acc());
-		}
+		}*/
 
 		return "common/sudo_index";
 	}
@@ -263,9 +283,9 @@ public class HomeController {
 		logger.info("remainder : " + remainder);
 		/* logger.info(productList.get(0).getP_name()); */
 		
-		for(int i = 0; i<productList.size() ; i++ ) {
+		/*for(int i = 0; i<productList.size() ; i++ ) {
 			logger.info("p_acc: " + productList.get(i).getP_acc());
-		}
+		}*/
 
 		return "common/sudo_index";
 	}

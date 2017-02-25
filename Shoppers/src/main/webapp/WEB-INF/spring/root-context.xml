@@ -2,7 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
@@ -10,6 +12,19 @@
 	<!-- 해당 패키지 아래에 어노테이션이 있는 모든 클래스를 스킨해서 bean 객체로 생성/관리 -->
 	<context:component-scan base-package="com.online.shop.persistence" />
 	<context:component-scan base-package="con.online.shop.service" />
+	
+	<mvc:annotation-driven>
+    <mvc:message-converters>
+        <!-- @ResponseBody로 String 처리할때 한글처리 -->
+        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+            <property name="supportedMediaTypes">
+                <list>
+                    <value>application/json;charset=UTF-8</value>
+                </list>
+            </property>
+        </bean>
+    </mvc:message-converters>
+	</mvc:annotation-driven>
 	
 	<!-- Bean: 스프링 프레임워크가 생성과 주입을 관리하는 객체(클래스) -->
 	<!-- Bean Property: 클래스의 멤버 변수(필드) -->
