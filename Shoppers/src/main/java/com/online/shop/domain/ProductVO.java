@@ -17,6 +17,7 @@ public class ProductVO {
 	private int p_favo;
 	private int p_sale_cnt;
 	private String p_img;
+	private String token;
 	
 	private String and_desc; // For androidApp only
 
@@ -150,6 +151,12 @@ public class ProductVO {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 
